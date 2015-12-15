@@ -13,3 +13,24 @@
     </li>
   {{/each}}
 </ol>
+
+<script>
+  var stream = new EventSource('/{{ this.sha }}/stream');
+  stream.addEventListener('message', function(event){
+    console.log(event);
+    var message = JSON.parse(event.data);
+    var messageList = document.querySelector('.messages');
+    var messageLi = document.createElement('li');
+    var inner = "<h3><i class='fa fa-";
+    if (message.reply){
+      inner += "reply";
+      messageLi.classList.add("reply");
+    } else {
+      inner += "share";
+      messageLi.classList.add("sent");
+    }
+    inner += "' ></i> <a href='/" + message.from + "'>" +message.from+"</a></h3><p><small>"+message.dateCreated+"</small></p><p>" + message.body + "</p>";
+    messageLi.innerHTML = inner;
+    messageList.appendChild(messageLi);
+  });
+</script>

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var twilio = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 var crypto = require('crypto');
+var sse = require("simple-sse");
 
 var numberMappings = {};
 
@@ -65,24 +66,36 @@ router.get('/:sha', function(req, res, next){
   });
 });
 
-router.post('/:sha/messages', function(req, res, next) {
-  var number = numberMappings[req.params.sha];
-  twilio.messages.create({
-    to: number,
-    from: process.env.TWILIO_PHONE_NUMBER,
-    body: req.body.message
-  }).then(function(response){
-    res.redirect('/' + req.params.sha);
-  }).catch(function(err){
-    console.log(err);
-    res.redirect('/');
-  });
-})
+// router.post('/:sha/messages', function(req, res, next) {
+//   var number = numberMappings[req.params.sha];
+//   twilio.messages.create({
+//     to: number,
+//     from: process.env.TWILIO_PHONE_NUMBER,
+//     body: req.body.message
+//   }).then(function(response){
+//     res.redirect('/' + req.params.sha);
+//   }).catch(function(err){
+//     console.log(err);
+//     res.redirect('/');
+//   });
+// })
 
 router.post('/messages', function(req, res, next){
-  var twiml = "<Response><Message>Hi, thanks for joining my stream today!</Message></Response>";
+  var sha = numToSha(req.body.From);
+  var message = {
+    body: req.body.Body,
+    from: sha,
+    dateCreated: req.body.DateCreated,
+    reply: req.body.From !== process.env.TWILIO_PHONE_NUMBER
+  }
+  sse.broadcast(sha, message);
   res.set('Content-Type', 'text/xml');
-  res.send(twiml);
+  res.send("<Response></Response>");
+});
+
+router.get('/:sha/stream', function(req, res) {
+  var client = sse.add(req, res);
+  sse.join(client, req.params.sha);
 });
 
 module.exports = router;
