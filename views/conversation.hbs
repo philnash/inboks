@@ -1,0 +1,12 @@
+<form action="/{{this.sha}}/messages" method="POST">
+  <input type="text" name="message" id="message">
+  <button type="submit">Send</button>
+</form>
+<ol>
+  {{#each messages}}
+    <li>
+      <h3><a href="/{{this.from}}">{{this.from}}</a></h3>
+      <p>{{this.body}}</p>
+    </li>
+  {{/each}}
+</ol>

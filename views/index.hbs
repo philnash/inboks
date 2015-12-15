@@ -1,5 +1,8 @@
 <ol>
   {{#each messages}}
-    <li>{{this.body}}</li>
+    <li>
+      <h3><a href="/{{this.from}}">{{this.from}}</a></h3>
+      <p>{{this.body}}</p>
+    </li>
   {{/each}}
 </ol>
