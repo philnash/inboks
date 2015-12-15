@@ -4,7 +4,7 @@
 </form>
 
 <h3>All messages</h3>
-<ol>
+<ol class="messages">
   {{#each messages}}
     <li class="{{#if this.reply }}reply{{else}}sent{{/if}}">
       <h3><a href="/{{this.from}}">{{this.from}}</a></h3>

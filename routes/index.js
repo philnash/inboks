@@ -60,7 +60,7 @@ router.get('/:sha', function(req, res, next){
     res.render('conversation', {
       title: 'Inboks',
       messages: allMessages,
-      sha: data.messages[0].from
+      sha: req.params.sha
     });
   });
 });
