@@ -7,7 +7,7 @@
 <ol>
   {{#each messages}}
     <li class="{{#if this.reply }}reply{{else}}sent{{/if}}">
-      <h3><a href="/{{this.from}}">{{this.from}}</a></h3>
+      <h3><i class="fa fa-{{#if this.reply }}reply{{else}}share{{/if}}" ></i> <a href="/{{this.from}}">{{this.from}}</a></h3>
       <p><small>{{this.dateCreated}}</small></p>
       <p>{{this.body}}</p>
     </li>
