@@ -2,10 +2,13 @@
   <input type="text" name="message" id="message">
   <button type="submit">Send</button>
 </form>
+
+<h3>All messages</h3>
 <ol>
   {{#each messages}}
-    <li>
+    <li class="{{#if this.reply }}reply{{else}}sent{{/if}}">
       <h3><a href="/{{this.from}}">{{this.from}}</a></h3>
+      <p><small>{{this.dateCreated}}</small></p>
       <p>{{this.body}}</p>
     </li>
   {{/each}}
